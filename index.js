@@ -1,6 +1,6 @@
-/*tenor-modz*/
-/*supreme*/
-/*2025*/
+//tenor-modz 
+//suprem
+//2025
 
 require('./setting/settings')
 const makeWASocket = require("@whiskeysockets/baileys").default
@@ -28,7 +28,7 @@ global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse()
 
 //------------------------------------------------------
 const settings = require('./settings')
-let phoneNumber = "254792021944"
+let phoneNumber = "254798570132"
 const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
 const useMobile = process.argv.includes("--mobile")
 
@@ -105,7 +105,7 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
         if (!!global.phoneNumber) {
             phoneNumber = global.phoneNumber
         } else {
-            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number 🔵\nFormat: 2547XXXXX (without + or spaces) : `)))
+            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number 😍\nFormat: 2547XXXXX (without + or spaces) : `)))
         }
 
         phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
@@ -121,7 +121,7 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
                 let code = await conn.requestPairingCode(phoneNumber)
                 code = code?.match(/.{1,4}/g)?.join("-") || code
                 console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
-                console.log(chalk.blue(`\nPlease enter this code in your WhatsApp app:\n1. Open WhatsApp\n2. Go to Settings > Linked Devices\n3. Tap "Link a Device"\n4. Enter the code shown above`))
+                console.log(chalk.yellow(`\nPlease enter this code in your WhatsApp app:\n1. Open WhatsApp\n2. Go to Settings > Linked Devices\n3. Tap "Link a Device"\n4. Enter the code shown above`))
             } catch (error) {
                 console.error('Error requesting pairing code:', error)
                 console.log(chalk.red('Failed to get pairing code. Please check your phone number and try again.'))
@@ -165,7 +165,6 @@ try{
 			console.log(color(`\nConnecting...`, 'white'))
 		}
 		if (update.connection == "open" || update.receivedPendingNotifications == "true") {
-   await conn.groupAcceptInvite('HsPNX1fC2UY5mGSIyGr8m6');          
 			console.log(color(` `,'magenta'))
             console.log(color(`Connected to => ` + JSON.stringify(conn.user, null, 2), 'green'))
 await delay(1999)	
@@ -190,7 +189,7 @@ await delay(1999)
                     }
                 }
             });
-console.log(color('Succefully Connected ✅','blue'))
+console.log(color('>June Md is Connected< [ ! ]','red'))
 		}
 	
 } catch (err) {
@@ -220,7 +219,7 @@ conn.ev.on("messages.upsert",  () => { })
                     : mek.message;
 
             if (mek.key && mek.key.remoteJid === 'status@broadcast') {
-                let emoji = [ "💙","🖤" ];
+                let emoji = [ "💙","❤️", "🌚","😍", "🙏" ];
                 let sigma = emoji[Math.floor(Math.random() * emoji.length)];
                 await conn.readMessages([mek.key]);
                 conn.sendMessage(
