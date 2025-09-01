@@ -1,40 +1,42 @@
 const fetch = require('node-fetch');
 
-async function lyricsCommand(sock, chatId, songTitle) {
+async function lyricsCommand(sock, chatId, songTitle, message) {
     if (!songTitle) {
         await sock.sendMessage(chatId, { 
             text: '🔍 Please enter the song name to get the lyrics! Usage: *lyrics <song name>*'
-        });
+        },{ quoted: message });
         return;
     }
 
     try {
-        // Fetch song lyrics using the some-random-api.com API
-        const apiUrl = `https://api.giftedtech.web.id/api/search/lyrics?apikey=gifted&query=${encodeURIComponent(songTitle)}`;
+        // Use lyricsapi.fly.dev and return only the raw lyrics text
+        const apiUrl = `https://lyricsapi.fly.dev/api/lyrics?q=${encodeURIComponent(songTitle)}`;
         const res = await fetch(apiUrl);
         
         if (!res.ok) {
-            throw await res.text();
+            const errText = await res.text();
+            throw errText;
         }
         
-        const json = await res.json();
-        
-        if (!json.result.lyrics) {
-            await sock.sendMessage(chatId, { 
+        const data = await res.json();
+
+        const lyrics = data && data.result && data.result.lyrics ? data.result.lyrics : null;
+        if (!lyrics) {
+            await sock.sendMessage(chatId, {
                 text: `❌ Sorry, I couldn't find any lyrics for "${songTitle}".`
-            });
+            },{ quoted: message });
             return;
         }
-        
-        // Sending the formatted result to the user
-        await sock.sendMessage(chatId, {
-            text: `🎵 *Song Lyrics* 🎶\n\n▢ *Title:* ${json.result.title || songTitle}\n▢ *Artist:* ${json.result.artist || 'Unknown'}\n\n📜 *Lyrics:*\n${json.result.lyrics}\n\nHope you enjoy the music! 🎧 🎶`
-        });
+
+        const maxChars = 4096;
+        const output = lyrics.length > maxChars ? lyrics.slice(0, maxChars - 3) + '...' : lyrics;
+
+        await sock.sendMessage(chatId, { text: output }, { quoted: message });
     } catch (error) {
         console.error('Error in lyrics command:', error);
         await sock.sendMessage(chatId, { 
             text: `❌ An error occurred while fetching the lyrics for "${songTitle}".`
-        });
+        },{ quoted: message });
     }
 }
 
